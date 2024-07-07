@@ -15,8 +15,9 @@ def index(request):
             ad.save()
     return render(request, "advertiser_management/ads.html", context)
 
-def make_ad(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+def make_ad(request, advertiser_id):
+    context = {'advertiser_id': advertiser_id}
+    return render(request, f"advertiser_management/makingForm.html", context)
 
 def click(request , ad_id):
     ad = Ad.objects.get(pk=ad_id)

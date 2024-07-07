@@ -1,0 +1,16 @@
+<form action="{% url 'advertiser_management:index' %}" method="post">
+    {% csrf_token %}
+    <label for="ads_id">Advertiser_id</label><br>
+    <input type="text" id="ads_id" name="ads_id"><br>
+
+    <label for="image">image</label><br>
+    <input type="file" id="image" name="image" accept="image/*"><br>
+
+    <label for="title">title</label><br>
+    <input type="text" id="title" name="title"><br>
+
+    <label for="url">url</label><br>
+    <input type="url" id="url" name="url"><br>
+
+    <input type="submit" value="Save">
+</form>
