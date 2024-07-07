@@ -1,11 +1,21 @@
 from django.shortcuts import render
-
+from django.db.models import F
 # Create your views here.
 from django.http import HttpResponse
 
+from advertiser_management.models import Advertiser
+
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    advertisers = Advertiser.objects.all()
+    context = {'advertisers': advertisers}
+    for advertiser in advertisers:
+        for ad in advertiser.advertisements.all():
+            ad.views = F('views') + 1
+    return render(request, "advertiser_management/ads.html", context)
 
 def make_ad(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+
+def click(request):
     return HttpResponse("Hello, world. You're at the polls index.")
