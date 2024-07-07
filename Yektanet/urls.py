@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+import advertiser_management
 
 urlpatterns = [
     path("ads/", include("advertiser_management.urls")),
     path('admin/', admin.site.urls),
+
+    path("click/", include("advertiser_management.urls"), name="click"),
 ]

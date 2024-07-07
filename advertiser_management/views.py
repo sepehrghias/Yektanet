@@ -20,6 +20,6 @@ def make_ad(request):
 
 def click(request , ad_id):
     ad = Ad.objects.get(pk=ad_id)
-    ad.click = F('clicks') + 1
+    ad.click = F('click') + 1
     ad.save()
     return redirect(ad.landing_url)
