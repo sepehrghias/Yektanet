@@ -5,6 +5,8 @@ from django.db import models
 
 class Advertiser(models.Model):
     name = models.CharField(max_length=200)
+    def __str__(self):
+        return self.name
 
 
 class Ad(models.Model):
@@ -14,3 +16,5 @@ class Ad(models.Model):
     image = models.ImageField(upload_to='ads/')
     views = models.IntegerField(default=0)
     landing_url = models.URLField(max_length=200)
+    def __str__(self):
+        return self.title
