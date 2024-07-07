@@ -1,10 +1,11 @@
 from django.shortcuts import render , redirect
 from django.db.models import F
+from django.urls import reverse
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
-from advertiser_management.models import Advertiser , Ad
-
+from advertiser_management.models import Advertiser, Ad
+from django.views.generic.edit import CreateView
 
 def index(request):
     advertisers = Advertiser.objects.all()
@@ -15,9 +16,24 @@ def index(request):
             ad.save()
     return render(request, "advertiser_management/ads.html", context)
 
-def make_ad(request, advertiser_id):
-    context = {'advertiser_id': advertiser_id}
-    return render(request, f"advertiser_management/makingForm.html", context)
+def make_ad(request):
+    try:
+        advertiser = Advertiser.objects.get(pk=request.POST["ads_id"])
+    except:
+        return render(request, "advertiser_management/makingForm.html",
+                      {"error_message": "This advertiser does not exist."})
+
+    title = request.POST["title"]
+    image = request.POST["image"]
+    url = request.POST["url"]
+    new_ad = {
+        "title": title,
+        "image": image,
+        "landing_url": url,
+        "advertiser": advertiser,
+    }
+    Ad.objects.create(**new_ad)
+    return HttpResponseRedirect(reverse("advertiser_management:index"))
 
 def click(request , ad_id):
     ad = Ad.objects.get(pk=ad_id)

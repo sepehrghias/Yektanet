@@ -1,4 +1,5 @@
-<form action="{% url 'advertiser_management:index' %}" method="post">
+<form action="{% url 'advertiser_management:make_ad' %}" method="post">
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     {% csrf_token %}
     <label for="ads_id">Advertiser_id</label><br>
     <input type="text" id="ads_id" name="ads_id"><br>
