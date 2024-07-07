@@ -8,8 +8,9 @@ class Advertiser(models.Model):
 
 
 class Ad(models.Model):
-    advertiser = models.ForeignKey("advertiser_management.Advertiser", on_delete=models.CASCADE)
+    advertiser = models.ForeignKey("advertiser_management.Advertiser", on_delete=models.CASCADE , related_name="ads")
     title = models.TextField()
     click = models.IntegerField(default=0)
     image = models.ImageField(upload_to='ads/')
     views = models.IntegerField(default=0)
+    landing_url = models.URLField(max_length=200)
