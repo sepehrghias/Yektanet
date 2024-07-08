@@ -27,23 +27,6 @@ def make_ad(request):
             form.save()
             return HttpResponseRedirect(reverse('advertiser_management:index'))
         return render(request, "advertiser_management/create_ad_form.html", context={"form":form})
-    # try:
-    #     advertiser = Advertiser.objects.get(pk=request.POST["ads_id"])
-    # except:
-    #     return render(request, "advertiser_management/makingForm.html",
-    #                   {"error_message": "This advertiser does not exist."})
-    #
-    # title = request.POST["title"]
-    # image = request.POST["image"]
-    # url = request.POST["url"]
-    # new_ad = {
-    #     "title": title,
-    #     "image": image,
-    #     "landing_url": url,
-    #     "advertiser": advertiser,
-    # }
-    # Ad.objects.create(**new_ad)
-    # return HttpResponseRedirect(reverse("advertiser_management:index"))
 
 def click(request , ad_id):
     ad = Ad.objects.get(pk=ad_id)
