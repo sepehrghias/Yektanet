@@ -1,4 +1,6 @@
-from django.shortcuts import render , redirect
+from django.utils import timezone
+
+from django.shortcuts import render, redirect
 from django.db.models import F
 from django.urls import reverse
 # Create your views here.
@@ -6,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.forms import ModelForm
 
 from advertiser_management.forms import CreateAdForm
-from advertiser_management.models import Advertiser, Ad
+from advertiser_management.models import Advertiser, Ad , View , Click
 from django.views.generic.edit import CreateView
 
 def index(request):
@@ -14,8 +16,11 @@ def index(request):
     context = {'advertisers': advertisers}
     for advertiser in advertisers:
         for ad in advertiser.ads.all():
-            ad.views = F('views') + 1
-            ad.save()
+            view = View.objects.create(
+            ad =ad,
+            view_date =timezone.now(),
+            ip_address =request.ip
+            )
     return render(request, "advertiser_management/ads.html", context)
 
 def make_ad(request):
@@ -30,7 +35,6 @@ def make_ad(request):
 
 def click(request , ad_id):
     ad = Ad.objects.get(pk=ad_id)
-    ad.click = F('click') + 1
-    ad.save()
+    new_click = Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
     return redirect(ad.landing_url)
 

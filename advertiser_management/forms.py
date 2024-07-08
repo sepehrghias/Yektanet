@@ -1,6 +1,7 @@
 from django import forms
 
-from advertiser_management.models import Ad
+from advertiser_management.models import Ad , View
+
 
 
 class CreateAdForm(forms.ModelForm):
