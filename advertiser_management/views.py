@@ -3,22 +3,27 @@ from django.db import transaction
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.views.generic.list import ListView
 
 from advertiser_management.forms import CreateAdForm
 from advertiser_management.models import Advertiser, Ad , View , Click
 
-@transaction.atomic
-def index(request):
-    advertisers = Advertiser.objects.all()
-    context = {'advertisers': advertisers}
-    for advertiser in advertisers:
-        for ad in advertiser.ads.all():
-            view = View.objects.create(
-            ad =ad,
-            view_date =timezone.now(),
-            ip_address =request.ip
-            )
-    return render(request, "advertiser_management/ads.html", context)
+
+class AdvertiserList(ListView):
+    model = Advertiser
+    template_name = 'advertiser_management/ads.html'
+    context_object_name = 'advertisers'
+    @transaction.atomic
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for advertiser in context['advertisers']:
+            for ad in advertiser.ads.all():
+                View.objects.create(
+                    ad=ad,
+                    view_date=timezone.now(),
+                    ip_address=self.request.META['REMOTE_ADDR']
+                )
+        return context
 
 def create_ad(request):
     form = CreateAdForm(request.POST or None, request.FILES or None)
