@@ -3,7 +3,7 @@ from django.contrib import admin
 from advertiser_management.models import Advertiser, Ad, View , Click
 
 class AdAdmin(admin.ModelAdmin):
-    list_filter = ('approve' ,)
+    list_filter = ('approve',)
     search_fields = ('title', )
 
 

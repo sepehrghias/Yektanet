@@ -3,9 +3,10 @@ from django.db import transaction
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 from advertiser_management.forms import CreateAdForm
-from advertiser_management.models import Advertiser, Ad , View , Click
+from advertiser_management.models import Advertiser, Ad, View, Click
 
 @transaction.atomic
 def index(request):
@@ -31,7 +32,7 @@ def create_ad(request):
         return render(request, "advertiser_management/create_ad_form.html", context={"form":form})
 
 def click(request , ad_id):
-    ad = Ad.objects.get(pk=ad_id)
+    ad = get_object_or_404(Ad, pk=ad_id)
     new_click = Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
     return redirect(ad.landing_url)
 
