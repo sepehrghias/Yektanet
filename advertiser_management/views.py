@@ -33,6 +33,6 @@ def create_ad(request):
 
 def click(request , ad_id):
     ad = get_object_or_404(Ad, pk=ad_id)
-    new_click = Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
+    Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
     return redirect(ad.landing_url)
 

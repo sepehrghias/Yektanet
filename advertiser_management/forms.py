@@ -1,6 +1,6 @@
 from django import forms
 
-from advertiser_management.models import Ad , View
+from advertiser_management.models import Ad
 
 
 
