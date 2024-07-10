@@ -6,5 +6,5 @@ urlpatterns = [
     path("", AdvertiserList.as_view(), name="index"),
     path("create/", CreatingForm.as_view(), name="create_ad"),
     path("<int:ad_id>/", views.click, name="click"),
-
+    path("report/", views.report,name="report"),
 ]

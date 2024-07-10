@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ad Report</title>
+</head>
+<body>
+    <h1>Ad Report</h1>
+    {% for item in report %}
+        <h2>{{ item.ad.title }}</h2>
+        <p><strong>Advertiser:</strong> {{ item.ad.advertiser.name }}</p>
+        <p><strong>Total Clicks:</strong> {{ item.clicks_per_hour|length }}</p>
+        <p><strong>Total Views:</strong> {{ item.views_per_hour|length }}</p>
+        <p><strong>CTR:</strong> {{ item.ctr }}</p>
+        <p><strong>Average Time Difference:</strong> {{ item.avg_time_diff }}</p>
+
+        <h3>Clicks Per Hour</h3>
+        <ul>
+            {% for click in item.clicks_per_hour %}
+                <li>{{ click.hour }}: {{ click.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Views Per Hour</h3>
+        <ul>
+            {% for view in item.views_per_hour %}
+                <li>{{ view.hour }}: {{ view.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>CTR Per Hour</h3>
+        <ul>
+            {% for ctr in item.ctr_per_hour %}
+                <li>{{ ctr.hour }}: Clicks: {{ ctr.clicks }}, Views: {{ ctr.views }}, CTR: {{ ctr.ctr }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>
