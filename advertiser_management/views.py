@@ -6,6 +6,9 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from django.db.models import Count, ExpressionWrapper , Avg, F , fields
 from django.db.models.functions import TruncHour
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 from advertiser_management.forms import CreateAdForm
 from advertiser_management.models import Advertiser, Ad , View , Click
@@ -33,8 +36,8 @@ class CreatingForm(CreateView):
     success_url = reverse_lazy('advertiser_management:index')
 
 def click(request , ad_id):
-    ad = Ad.objects.get(pk=ad_id)
-    new_click = Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
+    ad = get_object_or_404(Ad, pk=ad_id)
+    Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
     return redirect(ad.landing_url)
 
 class AdReportView(ListView):
