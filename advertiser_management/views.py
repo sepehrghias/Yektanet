@@ -1,28 +1,23 @@
 from django.utils import timezone
 from django.db import transaction
-from django.shortcuts import render, redirect
-from django.urls import reverse ,reverse_lazy
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
-from django.db.models import Count, ExpressionWrapper , Avg, F , fields
+from django.db.models import Count, ExpressionWrapper, Avg, F, fields
 from django.db.models.functions import TruncHour
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from advertiser_management.forms import CreateAdForm
-from advertiser_management.models import Advertiser, Ad , View , Click
+from advertiser_management.models import Advertiser, Ad, View, Click
 from advertiser_management.serializers import AdSerializer, AdvertiserSerializer
 
 
 class AdvertiserListView(generics.ListCreateAPIView):
     queryset = Advertiser.objects.all()
     serializer_class = AdvertiserSerializer
-
+    @transaction.atomic
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
         for advertiser in self.get_queryset():
@@ -30,6 +25,7 @@ class AdvertiserListView(generics.ListCreateAPIView):
                 View.objects.create(ad=ad, view_date=timezone.now(), ip_address=request.ip)
         return response
 
+@permission_classes([IsAuthenticated, IsAdminUser])
 class AdListView(generics.ListCreateAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
@@ -45,6 +41,7 @@ class ClickCreateView(APIView):
         Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
         return Response({'url': ad.landing_url}, status=302)
 
+@permission_classes([IsAuthenticated, IsAdminUser])
 class AdReportView(APIView):
     def get(self, request):
         ads = Ad.objects.all()
