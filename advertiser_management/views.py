@@ -32,9 +32,7 @@ class AdListView(ViewSet):
     serializer_class = AdSerializer
 
     def list(self, request, *args, **kwargs):
-        queryset = Advertiser.objects.all()
-        serializer = AdvertiserSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response()
     def create(self, request, *args, **kwargs):
         serializer = AdSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
