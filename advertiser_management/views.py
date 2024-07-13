@@ -26,7 +26,7 @@ class AdvertiserList(ListView):
                 View.objects.create(
                     ad=ad,
                     view_date=timezone.now(),
-                    ip_address=self.request.META['REMOTE_ADDR']
+                    ip_address=self.request.ip
                 )
         return context
 
