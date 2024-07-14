@@ -5,14 +5,14 @@ from django.db.models.functions import TruncHour
 from django.shortcuts import get_object_or_404
 
 from rest_framework.response import Response
-from rest_framework import generics , status
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ViewSet
 
 from advertiser_management.models import Advertiser, Ad, View, Click
-from advertiser_management.serializers import AdSerializer, AdvertiserSerializer
+from advertiser_management.serializers import AdSerializer, AdvertiserSerializer, AdGetterSerializer
 
 
 class AdvertiserListView(generics.ListCreateAPIView):
@@ -90,3 +90,9 @@ class AdReportView(APIView):
             })
 
         return Response(report)
+
+class AdGoCpc(APIView):
+    def get(self, request):
+        sorted_ads = Ad.objects.all().order_by('-cpc').values()
+        serilizer = AdGetterSerializer(sorted_ads, many=True)
+        return Response(serilizer.data)
