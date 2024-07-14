@@ -93,6 +93,6 @@ class AdReportView(APIView):
 
 class AdGoCpc(APIView):
     def get(self, request):
-        sorted_ads = Ad.objects.all().order_by('-cpc').values()
+        sorted_ads = Ad.objects.all().order_by('-cpc')
         serilizer = AdGetterSerializer(sorted_ads, many=True)
         return Response(serilizer.data)
