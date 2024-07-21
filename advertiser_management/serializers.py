@@ -10,8 +10,3 @@ class AdvertiserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertiser
         fields = ['id', 'name', 'ads']
-
-class AdGetterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ad
-        fields = ['title', 'image']

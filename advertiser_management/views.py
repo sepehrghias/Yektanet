@@ -1,18 +1,18 @@
-from django.utils import timezone
 from django.db import transaction
 from django.db.models import Count, ExpressionWrapper, Avg, F, fields
 from django.db.models.functions import TruncHour
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
-from rest_framework.response import Response
 from rest_framework import generics, status
-from rest_framework.views import APIView
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 
 from advertiser_management.models import Advertiser, Ad, View, Click
-from advertiser_management.serializers import AdSerializer, AdvertiserSerializer, AdGetterSerializer
+from advertiser_management.serializers import AdSerializer, AdvertiserSerializer
 
 
 class AdvertiserListView(generics.ListCreateAPIView):
@@ -91,8 +91,3 @@ class AdReportView(APIView):
 
         return Response(report)
 
-class AdGoCpc(APIView):
-    def get(self, request):
-        sorted_ads = Ad.objects.all().order_by('-cpc')
-        serilizer = AdGetterSerializer(sorted_ads, many=True)
-        return Response(serilizer.data)
