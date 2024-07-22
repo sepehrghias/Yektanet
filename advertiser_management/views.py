@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
+from rest_framework.generics import CreateAPIView
 
 from advertiser_management.models import Advertiser, Ad, View, Click
 from advertiser_management.serializers import AdSerializer, AdvertiserSerializer
@@ -27,17 +28,9 @@ class AdvertiserListView(generics.ListCreateAPIView):
         return response
 
 @permission_classes([IsAuthenticated, IsAdminUser])
-class AdListView(ViewSet):
+class AdListView(CreateAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
-
-    def list(self, request, *args, **kwargs):
-        return Response()
-    def create(self, request, *args, **kwargs):
-        serializer = AdSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ClickCreateView(APIView):
