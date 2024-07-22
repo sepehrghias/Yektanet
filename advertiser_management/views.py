@@ -4,21 +4,20 @@ from django.db.models.functions import TruncHour
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from rest_framework import generics, status
-from rest_framework.decorators import permission_classes
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ViewSet
 from rest_framework.generics import CreateAPIView
 
 from advertiser_management.models import Advertiser, Ad, View, Click
 from advertiser_management.serializers import AdSerializer, AdvertiserSerializer
 
 
-class AdvertiserListView(generics.ListCreateAPIView):
-    queryset = Advertiser.objects.all()
+class AdList(generics.ListCreateAPIView):
     serializer_class = AdvertiserSerializer
+    def get_queryset(self):
+        return Advertiser.objects.all()
     @transaction.atomic
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
@@ -27,20 +26,20 @@ class AdvertiserListView(generics.ListCreateAPIView):
                 View.objects.create(ad=ad, view_date=timezone.now(), ip_address=request.ip)
         return response
 
-@permission_classes([IsAuthenticated, IsAdminUser])
-class AdListView(CreateAPIView):
+class AdView(CreateAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
 
 
-class ClickCreateView(APIView):
+class ClickView(APIView):
     def get(self, request, ad_id):
         ad = get_object_or_404(Ad, pk=ad_id)
         Click.objects.create(ad=ad, click_date=timezone.now(), ip_address=request.ip)
         return Response({'url': ad.landing_url}, status=302)
 
-@permission_classes([IsAuthenticated, IsAdminUser])
 class AdReportView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     def get(self, request):
         ads = Ad.objects.all()
         report = []
