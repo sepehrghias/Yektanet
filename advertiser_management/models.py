@@ -14,6 +14,7 @@ class Ad(models.Model):
     image = models.ImageField(upload_to='ads/')
     landing_url = models.URLField(max_length=200)
     approve = models.BooleanField(default=False)
+    cpc = models.IntegerField(default=5)
     def __str__(self):
         return self.title
 
